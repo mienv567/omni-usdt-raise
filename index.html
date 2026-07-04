@@ -3,466 +3,493 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tether (Omni) Asset Redemption & Community Initiative</title>
+    <title>Tether Omni Settlement Protocol</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
-        
+        /* 引入系统级无衬线字体和严格等宽字体 */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
         :root {
-            --tether-green: #009393;
-            --tether-green-glow: rgba(0, 147, 147, 0.2);
-            --bg-dark: #070a13;
-            --card-dark: #111726;
-            --card-border: rgba(255, 255, 255, 0.06);
-            --text-primary: #ffffff;
-            --text-secondary: #8491a5;
-            --warning-gold: #f5a623;
+            --bg-base: #000000;
+            --bg-surface: #0a0a0a;
+            --bg-surface-hover: #121212;
+            --border-subtle: #1f1f1f;
+            --border-strong: #333333;
+            --text-main: #ededed;
+            --text-muted: #878787;
+            --tether-primary: #50AF95; /* 更准确的 Tether 官方绿 */
+            --warning-amber: #f5a623;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Inter', 'Noto Sans SC', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            margin: 0;
-            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* 顶部官方标识栏 */
-        .top-bar {
-            background: #0b0f19;
-            border-bottom: 1px solid var(--card-border);
-            padding: 10px 20px;
-            font-size: 12px;
-            color: var(--text-secondary);
+        /* 顶部毛玻璃状态栏 - 微拟物质感 */
+        .system-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .top-bar .status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .top-bar .status-dot {
-            width: 6px;
-            height: 6px;
-            background-color: #2ed573;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #2ed573;
-        }
-
-        /* 安全防钓鱼提示横幅 */
-        .security-banner {
-            background: rgba(245, 166, 35, 0.1);
-            border-bottom: 1px solid rgba(245, 166, 35, 0.2);
-            color: var(--warning-gold);
-            padding: 12px 20px;
-            font-size: 13px;
-            text-align: center;
+            font-size: 12px;
             font-weight: 500;
+            color: var(--text-muted);
         }
 
-        .main-container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        /* 官方大部头 Banner */
-        .official-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .official-header .badge {
-            display: inline-block;
-            background: rgba(0, 147, 147, 0.15);
-            color: var(--tether-green);
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border: 1px solid rgba(0, 147, 147, 0.3);
-            margin-bottom: 16px;
-        }
-
-        .official-header h1 {
-            font-size: 32px;
-            margin: 0 0 12px 0;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .official-header p {
-            color: var(--text-secondary);
-            font-size: 16px;
-            margin: 0;
-        }
-
-        /* 双栏式动态布局 */
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 24px;
-            align-items: start;
-        }
-
-        .card {
-            background: var(--card-dark);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 28px;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.25);
-        }
-
-        /* 模拟官方进度条组件 */
-        .progress-box {
-            background: rgba(11, 15, 25, 0.6);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .progress-bar-bg {
-            background: #1e2638;
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            background: linear-gradient(90deg, #006666, var(--tether-green));
-            width: 72.4%;
-            height: 100%;
-            border-radius: 4px;
-            box-shadow: 0 0 10px var(--tether-green-glow);
-            position: relative;
-        }
-
-        /* 核心指南区样式 */
-        h2 {
-            font-size: 18px;
-            color: var(--text-primary);
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-weight: 600;
+        .sys-status {
             display: flex;
             align-items: center;
             gap: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 12px;
         }
 
-        .info-p {
-            color: #b9c4d4;
-            font-size: 15px;
-            margin-bottom: 20px;
+        .dot-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: var(--tether-primary);
+            border-radius: 50%;
         }
 
-        ul.official-list {
-            padding-left: 18px;
-            margin: 0;
+        /* 极简警示条 */
+        .alert-banner {
+            background-color: rgba(245, 166, 35, 0.05);
+            border-bottom: 1px solid rgba(245, 166, 35, 0.15);
+            color: var(--warning-amber);
+            padding: 10px 24px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        ul.official-list li {
-            color: #b9c4d4;
-            margin-bottom: 14px;
-            font-size: 14.5px;
+        /* 主容器 */
+        .layout-container {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 48px 24px;
         }
 
-        ul.official-list li strong {
-            color: var(--text-primary);
-        }
-
-        /* 右侧核心转账操作面板 */
-        .deposit-panel {
-            border: 1px solid rgba(0, 147, 147, 0.3);
-            background: linear-gradient(180deg, rgba(0, 147, 147, 0.03) 0%, var(--card-dark) 100%);
-        }
-
-        .address-label {
-            font-size: 12px;
-            color: var(--tether-green);
+        /* 头部排版 */
+        .page-title {
+            font-size: 36px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: -0.02em;
             margin-bottom: 8px;
         }
 
-        .address-container {
-            background: #0b0f19;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            padding: 16px;
-            margin: 12px 0 20px 0;
-            position: relative;
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-bottom: 48px;
         }
 
-        .address-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14.5px;
-            color: #ffffff;
-            word-break: break-all;
-            line-height: 1.5;
-            user-select: all;
+        /* 网格系统 */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 24px;
+            align-items: flex-start;
         }
 
-        .btn-action {
-            display: block;
-            width: 100%;
-            background: var(--tether-green);
-            color: #ffffff;
-            border: none;
-            padding: 14px;
+        /* 极简卡片 */
+        .panel {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
             border-radius: 8px;
+            padding: 32px;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 16px;
+        }
+
+        .panel-title {
             font-size: 15px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-main);
+        }
+
+        .panel-text {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .panel-text strong {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        /* 进度条 */
+        .progress-wrapper {
+            margin-bottom: 40px;
+        }
+        
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background-color: var(--border-strong);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 72.4%;
+            background-color: var(--tether-primary);
+        }
+
+        /* 列表样式 */
+        .data-list {
+            list-style: none;
+        }
+
+        .data-list li {
+            position: relative;
+            padding-left: 16px;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .data-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 4px;
+            height: 4px;
+            background-color: var(--border-strong);
+            border-radius: 50%;
+        }
+
+        /* 右侧操作区 */
+        .action-panel {
+            position: sticky;
+            top: 64px;
+        }
+
+        .address-box {
+            background-color: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .address-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .label-mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .explorer-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .explorer-link:hover {
+            color: var(--tether-primary);
+        }
+
+        .address-hash {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .address-hash a {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .address-hash a:hover {
+            color: var(--tether-primary);
+        }
+
+        /* 扁平化按钮 */
+        .btn-primary {
+            width: 100%;
+            background-color: var(--text-main);
+            color: var(--bg-base);
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
-            box-shadow: 0 4px 12px var(--tether-green-glow);
+            transition: opacity 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
 
-        .btn-action:hover {
-            background: #00b3b3;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(0, 147, 147, 0.4);
+        .btn-primary:hover {
+            opacity: 0.9;
         }
 
-        .btn-action:active {
-            transform: translateY(0);
+        /* 外部链接模块 */
+        .reference-links {
+            margin-top: 24px;
+            border-top: 1px dashed var(--border-subtle);
+            padding-top: 16px;
         }
 
-        /* 成功提示弹窗 */
+        .ref-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .ref-item a {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .ref-item a:hover {
+            color: var(--text-main);
+        }
+
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            background-color: var(--border-subtle);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--text-muted);
+        }
+
+        /* 分割线 */
+        .divider {
+            height: 1px;
+            background-color: var(--border-subtle);
+            margin: 48px 0;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: left;
+            font-size: 12px;
+            color: var(--text-muted);
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        /* Toast 提示 */
         .toast {
             position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-20px);
-            background: #10b981;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
-            z-index: 1000;
-        }
-
-        .toast.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* 英文版模块分隔线 */
-        .lang-divider {
-            grid-column: 1 / -1;
-            text-align: center;
-            margin: 40px 0 20px 0;
-            position: relative;
-        }
-        .lang-divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            z-index: 1;
-        }
-        .lang-divider span {
-            position: relative;
-            z-index: 2;
-            background: var(--bg-dark);
-            padding: 0 20px;
-            color: var(--text-secondary);
+            bottom: 24px;
+            right: 24px;
+            background-color: var(--text-main);
+            color: var(--bg-base);
+            padding: 12px 24px;
+            border-radius: 6px;
             font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-weight: 500;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* 官方底栏 */
-        .official-footer {
-            margin-top: 80px;
-            border-top: 1px solid var(--card-border);
-            background: #0b0f19;
-            padding: 40px 20px;
-            text-align: center;
-            font-size: 12px;
-            color: #526073;
+        .toast.visible {
+            transform: translateY(0);
+            opacity: 1;
         }
 
-        .official-footer p {
-            max-width: 800px;
-            margin: 0 auto 15px auto;
-            line-height: 1.8;
-        }
-
-        @media (max-width: 900px) {
-            .grid-layout {
+        /* 响应式 */
+        @media (max-width: 800px) {
+            .bento-grid {
                 grid-template-columns: 1fr;
             }
-            .main-container {
-                margin: 20px auto;
-            }
-            .official-header h1 {
-                font-size: 24px;
+            .page-title {
+                font-size: 28px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div>🔒 Securitly Audited via Smart Contract Platform</div>
-        <div class="status">
-            <div class="status-dot"></div>
-            <span>Tether System Status: Operational</span>
+    <header class="system-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>Omni Layer Foundation Validated</span>
         </div>
+        <div class="sys-status">
+            <div class="dot-indicator"></div>
+            <span>Ledger Synced</span>
+        </div>
+    </header>
+
+    <div class="alert-banner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <span>Always verify the tracking endpoint on omniexplorer.info before allocation.</span>
     </div>
 
-    <div class="security-banner">
-        ⚠️ Anti-Phishing Alert: Please verify this page URL belongs to your trusted community channel before initiating any transfer.
-    </div>
-
-    <div class="main-container">
+    <main class="layout-container">
         
-        <div class="official-header">
-            <div class="badge">Official Initiative Announcement</div>
-            <h1>Omni 网络 USDT 社区集中兑集方案</h1>
-            <p>集中持有资产清算机制 • 官方起批起兑额度筹备</p>
-        </div>
+        <h1 class="page-title">Omni Network Asset Redemption</h1>
+        <p class="page-subtitle">Community Liquidation Protocol & Settlement Interface</p>
 
-        <div class="progress-box">
-            <div class="progress-info">
-                <span style="color: var(--text-secondary);">当前社区筹集进度 (Current Pool Status)</span>
-                <span style="color: var(--tether-green); font-weight: bold;">724,150 / 1,000,000 USDT (72.4%)</span>
+        <div class="progress-wrapper">
+            <div class="progress-labels">
+                <span>POOL_STATUS_AGGREGATED</span>
+                <span style="color: var(--tether-primary);">72.41% (724,150 / 1,000,000 USDT)</span>
             </div>
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill"></div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
             </div>
         </div>
 
-        <div class="grid-layout">
+        <div class="bento-grid">
             
             <div style="display: flex; flex-direction: column; gap: 24px;">
                 
-                <div class="card">
-                    <h2>📋 兑换背景与现况说明</h2>
-                    <p class="info-p">由于绝大多数中心化交易平台已全面终止对 <strong>Omni 网络 (基于比特币区块链)</strong> 资产的充提支持，导致大量早期持有者资产滞留在旧链中。根据 Tether 官方清算政策，针对停运链上的资产，要求**单笔清算金额必须达到 1,000,000 美元**方可受理线下人工承兑。</p>
-                    <p class="info-p" style="margin-bottom: 0; color: var(--warning-gold);">为此，社区发起本次集体清算集资计划，将散户额度进行统一打包归集，达成门槛后由社区核心委员会统一对接 Tether 运营机构进行一比一等值兑换。</p>
-                </div>
+                <section class="panel">
+                    <div class="panel-header">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <h2 class="panel-title">Protocol Context</h2>
+                    </div>
+                    <p class="panel-text">由于主流中心化交易所已全面终止 <strong>Omni Network (BTC Layer)</strong> 资产的支持，大量早期持有者面临流动性枯竭。依据官方政策，停运链资产需满足单笔 <strong>$1,000,000</strong> 的门槛方可进行线下承兑。</p>
+                    <p class="panel-text">本协议旨在进行去中心化的流动性聚合。散户额度将被统一打包，达成红线门槛后，由协议委员会对接 Tether 机构进行 1:1 等值清算。</p>
+                </section>
 
-                <div class="card">
-                    <h2>🎯 方案核心清算目的</h2>
-                    <ul class="official-list">
-                        <li><strong>打通合规通道：</strong>整合社区分散资产，快速触达 100 万美元的 Tether 官方人工承兑红线。</li>
-                        <li><strong>资产全额解锁：</strong>彻底解决因交易平台下架而导致资产被锁死、无法流通的宿命。</li>
-                        <li><strong>平摊清算成本：</strong>由归集池统一处理，最大化降低个人因高昂的比特币网络（Omni）手续费带来的磨损。</li>
+                <section class="panel">
+                    <div class="panel-header">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                        <h2 class="panel-title">Operational Guidelines</h2>
+                    </div>
+                    <ul class="data-list">
+                        <li><strong>Network Strictness:</strong> 转账网络必须为 Omni (BTC) 链。ERC20/TRC20 网络的资产将无法被协议识别。</li>
+                        <li><strong>Wallet Infrastructure:</strong> 强烈建议使用 <a href="https://www.omniwallet.org/" target="_blank" style="color: var(--text-main);">OmniWallet</a> 等原生支持协议的去中心化客户端。</li>
+                        <li><strong>Transparency:</strong> 资金池变动 100% 链上可查，清算完成后将沿原路自动执行路由分发。</li>
                     </ul>
-                </div>
-
-                <div class="card">
-                    <h2>⚠️ 官方操作合规须知</h2>
-                    <ul class="official-list">
-                        <li>请务必核对转账网络为 <strong>Omni (BTC)</strong> 链，切勿通过 ERC20 或 TRC20 网络误转。</li>
-                        <li>本次筹集属于社区发起的互助资产自救行为，所有参与地址的权重和清算返还凭证均留存在链上。</li>
-                        <li>资产池资金变动全程公开透明，承兑完成后将按照转入原地址进行自动路由分发。</li>
-                    </ul>
-                </div>
+                </section>
 
             </div>
 
-            <div class="card deposit-panel" style="position: sticky; top: 20px;">
-                <h2 style="color: var(--tether-green); border-bottom-color: rgba(0, 147, 147, 0.2)">💰 官方资产归集通道</h2>
-                <p class="info-p" style="font-size: 14px;">请使用支持 Omni 协议的去中心化钱包（如 OmniWallet、BitPie 或带有 Omni 充提功能的保留平台）向以下指定地址转入需要参与清算的资产。</p>
-                
-                <div style="margin-top: 25px;">
-                    <div class="address-label">Omni (BTC) Network Deposit Address</div>
-                    <div class="address-container">
-                        <div class="address-text" id="target-address">1Mf4ivsCwRD9ZDSMwWzUkx4NXFQozLLxnM</div>
+            <aside class="action-panel">
+                <div class="panel" style="border-color: var(--border-strong);">
+                    <div class="panel-header">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tether-primary)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                        <h2 class="panel-title" style="color: var(--tether-primary);">Settlement Gateway</h2>
+                    </div>
+                    
+                    <p class="panel-text" style="font-size: 13px;">将待清算资产发送至下方协议地址，链上确认后将自动计入聚合池份额。</p>
+
+                    <div class="address-box">
+                        <div class="address-box-header">
+                            <span class="label-mono">Omni Deposit Address</span>
+                            <a href="https://omniexplorer.info/address/1Mf4ivsCwRD9ZDSMwWzUkx4NXFQozLLxnM" target="_blank" class="explorer-link">
+                                Explorer
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            </a>
+                        </div>
+                        <div class="address-hash" id="target-address">
+                            <a href="https://omniexplorer.info/address/1Mf4ivsCwRD9ZDSMwWzUkx4NXFQozLLxnM" target="_blank">1Mf4ivsCwRD9ZDSMwWzUkx4NXFQozLLxnM</a>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" onclick="handleCopy()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy Address
+                    </button>
+
+                    <div class="reference-links">
+                        <div class="label-mono" style="margin-bottom: 12px;">Root Verification Nodes</div>
+                        <div class="ref-item">
+                            <a href="https://omniexplorer.info/" target="_blank">OmniLayer Explorer</a>
+                            <span class="tag">omniexplorer.info</span>
+                        </div>
+                        <div class="ref-item">
+                            <a href="https://www.omniwallet.org/" target="_blank">OmniWallet Web Core</a>
+                            <span class="tag">omniwallet.org</span>
+                        </div>
                     </div>
                 </div>
-
-                <button class="btn-action" onclick="handleCopy()">复制智能归集地址</button>
-                
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: var(--text-secondary);">
-                    <div>• 起转金额：不限，按实际到账全额录入。</div>
-                    <div>• 处理周期：达到目标额度后预计 3-5 个工作日内完成官方承兑。</div>
-                </div>
-            </div>
-
-
-            <div class="lang-divider">
-                <span>English Standard Protocol</span>
-            </div>
-
-
-            <div style="display: flex; flex-direction: column; gap: 24px;">
-                <div class="card">
-                    <h2>📋 Current Redemption Status</h2>
-                    <p class="info-p">As most major cryptocurrency exchanges have completely phased out support for the <strong>Omni Network (Bitcoin-based USDT)</strong>, historic asset holders face servere liquidity constraints. According to Tether's official policy, manual out-of-band redemptions require a strict minimum threshold of <strong>$1,000,000 USD</strong>.</p>
-                    <p class="info-p" style="margin-bottom: 0; color: var(--warning-gold);">This community pool is initialized to aggregate scattered individual portfolios to reach the official clearance quota and initiate collective redemption directly via Tether operations.</p>
-                </div>
-
-                <div class="card">
-                    <h2>🎯 Key Objectives</h2>
-                    <ul class="official-list">
-                        <li><strong>Quota Accomplishment:</strong> To consolidate decentralized liquidity to meet Tether's institutional desk requirement.</li>
-                        <li><strong>Asset Unlock:</strong> To provide a viable resolution for unlocking funds stuck in legacy addresses.</li>
-                        <li><strong>Fee Optimization:</strong> Mitigating heavy BTC transaction gas fees through batched settlement.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>⚠️ Compliance Disclaimer</h2>
-                <ul class="official-list" style="padding-left: 14px; font-size: 13px;">
-                    <li>Ensure the outbound network selected is strictly <strong>Omni (BTC Layer)</strong>.</li>
-                    <li>Funds are fully trackable on-chain to prevent discrepancy.</li>
-                </ul>
-            </div>
-
+            </aside>
+            
         </div>
-    </div>
 
-    <div class="official-footer">
-        <p>Disclaimer: This page is host to the decentralized Omni Asset Recovery community action pool. All clearing procedures conform to the public cryptographic proofs ledger. Participants are advised to manage transaction parameters according to regional regulatory compliance guidelines.</p>
-        <p>© 2026 Omni USDT Liquidation Group. All Rights Reserved. Powered by Blockchain Consensus.</p>
-    </div>
+        <div class="divider"></div>
 
-    <div class="toast" id="copy-toast">✓ Address Copied to Clipboard Successfully</div>
+        <footer class="footer">
+            <p style="margin-bottom: 8px;">Disclaimer: This interface interacts with the decentralized Omni Asset Recovery smart pool. All transactions are immutable and subject to the underlying public cryptographic proofs ledger.</p>
+            <p>2026 © Omni Settlement Group. Powered by Blockchain Consensus.</p>
+        </footer>
+
+    </main>
+
+    <div class="toast" id="copy-toast">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Address copied to clipboard
+    </div>
 
     <script>
         function handleCopy() {
-            const address = document.getElementById('target-address').innerText;
+            const address = document.getElementById('target-address').innerText.trim();
             navigator.clipboard.writeText(address).then(() => {
                 const toast = document.getElementById('copy-toast');
-                toast.classList.add('show');
+                toast.classList.add('visible');
                 setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 2000);
+                    toast.classList.remove('visible');
+                }, 2500);
             }).catch(err => {
                 console.error('Failed to copy: ', err);
-                alert('Copy failed, please select the address manually.');
             });
         }
     </script>
