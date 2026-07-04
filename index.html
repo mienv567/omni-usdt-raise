@@ -5,74 +5,206 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Omni USDT 100万U兑换筹集计划</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; background: #f9f9f9; color: #333; }
-        h1 { color: #e91e63; text-align: center; }
-        h2 { color: #1976d2; }
-        .section { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .en { margin-top: 60px; border-top: 2px solid #ddd; padding-top: 40px; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans SC', Arial, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            color: #333;
+        }
+        
+        .container {
+            max-width: 820px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .section {
+            background: #f8f9fa;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #e91e63;
+        }
+        
+        h2 {
+            color: #1976d2;
+            margin-top: 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        .highlight {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            color: #e65100;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #e91e63;
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 20px 0;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #c2185b;
+            transform: translateY(-3px);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+        
+        .en {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 3px dashed #ddd;
+        }
+        
+        @media (max-width: 600px) {
+            .container { margin: 15px; }
+            .header h1 { font-size: 24px; }
+        }
     </style>
 </head>
 <body>
-    <h1>Omni USDT 社区筹集100万U兑换计划</h1>
-    
-    <div class="section">
-        <p>目前多数交易所已不支持 Omni USDT。Tether 官方要求必须达到100万美元规模才能支持兑换服务。</p>
-        <p>为帮助大家顺利兑换资产，社区发起此次筹集活动，目标 <strong>筹集100万 USDT</strong>，达到要求后统一进行兑换。</p>
-    </div>
-
-    <div class="section">
-        <h2>筹集目的</h2>
-        <ul>
-            <li>凑齐100万美元，满足 Tether 兑换条件</li>
-            <li>让持有 Omni USDT 的用户能正常兑换</li>
-            <li>解决资产被卡住的问题</li>
-        </ul>
-    </div>
-
-    <div class="section">
-        <h2>参与方式</h2>
-        <p>直接将 Omni USDT 转入官方指定筹集地址（以社区最新公告为准）。金额不限。</p>
-    </div>
-
-    <div class="section">
-        <h2>注意事项</h2>
-        <ul>
-            <li>只用闲钱参与，注意风险</li>
-            <li>务必核对官方地址，防止诈骗</li>
-            <li>资金使用全程公开透明</li>
-        </ul>
-    </div>
-
-    <p style="text-align:center; font-weight:bold;">有 Omni USDT 的朋友们行动起来！共同凑齐100万，早日完成兑换。</p>
-
-    <!-- English Version -->
-    <div class="en">
-        <h1>Omni USDT Community Raise 1 Million USDT for Redemption</h1>
-        <div class="section">
-            <p>Most exchanges no longer support Omni USDT. Tether requires a minimum of 1 million USD for redemption services.</p>
-            <p>The community is raising <strong>1 million USDT</strong> to meet the requirement and process a collective redemption.</p>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🚀 Omni USDT 社区筹集计划</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.95;">目标 100万 USDT｜助力顺利兑换</p>
         </div>
-        <div class="section">
-            <h2>Purpose</h2>
-            <ul>
-                <li>Reach 1M USD to satisfy Tether’s requirement</li>
-                <li>Help Omni USDT holders redeem their assets</li>
-                <li>Unlock stuck funds</li>
-            </ul>
+
+        <div class="content">
+            <div class="section">
+                <p><strong>当前情况：</strong>多数交易所已不支持 Omni USDT。<br>
+                Tether 官方要求达到 <strong style="color:#e91e63;">100万美元</strong> 才能支持兑换服务。</p>
+                
+                <p class="highlight">
+                    社区正在发起集体筹集，凑齐100万后将统一联系 Tether 进行兑换。
+                </p>
+            </div>
+
+            <div class="section">
+                <h2>🎯 筹集目的</h2>
+                <ul>
+                    <li>✅ 达到 Tether 官方兑换门槛</li>
+                    <li>✅ 帮助持有 Omni USDT 的用户顺利兑换</li>
+                    <li>✅ 解决资产长期卡在旧链的问题</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>📍 参与方式</h2>
+                <p>将你的 <strong>Omni USDT</strong> 转入官方指定筹集地址（请以社区最新公告地址为准）。</p>
+                <p>金额不限，越多越快达成目标。</p>
+                <center>
+                    <a href="#" class="btn">立即参与筹集</a>
+                </center>
+            </div>
+
+            <div class="section">
+                <h2>⚠️ 注意事项</h2>
+                <ul>
+                    <li>只使用自己能承受风险的闲钱参与</li>
+                    <li>务必核对官方地址，防止诈骗</li>
+                    <li>所有资金流向全程公开透明，接受社区监督</li>
+                </ul>
+            </div>
+
+            <p style="text-align:center; font-size:18px; font-weight:bold; color:#e91e63;">
+                有 Omni USDT 的朋友们，一起行动起来！<br>
+                共同凑齐100万，早日完成兑换！
+            </p>
+
+            <!-- English Version -->
+            <div class="en">
+                <h1 style="text-align:center; color:#1976d2;">English Version</h1>
+                
+                <div class="section">
+                    <p><strong>Current Situation:</strong> Most exchanges no longer support Omni USDT.<br>
+                    Tether requires a minimum of <strong>1 Million USD</strong> for redemption.</p>
+                    
+                    <p class="highlight">
+                        The community is raising 1 Million USDT together to meet the requirement and redeem collectively.
+                    </p>
+                </div>
+
+                <div class="section">
+                    <h2>🎯 Purpose</h2>
+                    <ul>
+                        <li>✅ Meet Tether’s redemption requirement</li>
+                        <li>✅ Help Omni USDT holders unlock assets</li>
+                        <li>✅ Solve stuck funds issue</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h2>📍 How to Participate</h2>
+                    <p>Send your Omni USDT to the official collection address (always check latest announcement).</p>
+                </div>
+
+                <div class="section">
+                    <h2>⚠️ Important Notes</h2>
+                    <ul>
+                        <li>Only invest what you can afford to lose</li>
+                        <li>Always verify the official address</li>
+                        <li>Full transparency, community supervision</li>
+                    </ul>
+                </div>
+
+                <p style="text-align:center; font-size:17px; font-weight:bold;">
+                    If you hold Omni USDT, join us now!
+                </p>
+            </div>
         </div>
-        <div class="section">
-            <h2>How to Participate</h2>
-            <p>Send Omni USDT to the official collection address (always verify latest announcement). Any amount accepted.</p>
+
+        <div class="footer">
+            <p>Omni USDT Community Initiative • 2026</p>
         </div>
-        <div class="section">
-            <h2>Important Notes</h2>
-            <ul>
-                <li>Only use funds you can afford to risk</li>
-                <li>Double-check official address to avoid scams</li>
-                <li>All transactions will be transparent</li>
-            </ul>
-        </div>
-        <p style="text-align:center; font-weight:bold;">If you hold Omni USDT, join us now and let’s reach the goal together!</p>
     </div>
 </body>
 </html>
